@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "release/**"]
+  pull_request:
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        workspace: [api, mobile]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install (workspaces)
+        run: npm ci
+      - name: Typecheck @aether/${{ matrix.workspace }}
+        run: npm run typecheck -w @aether/${{ matrix.workspace }}
+      - name: Typecheck @aether/shared
+        run: npx tsc --noEmit -p packages/shared
+
+  secrets-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail on staged .env files
+        run: |
+          git ls-files | grep -E '(^|/)\.env$' && echo "A .env file is committed — remove it" && exit 1 || exit 0
