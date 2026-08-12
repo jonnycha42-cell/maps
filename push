@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# push-to-github.sh — usage: ./push-to-github.sh <repo-name> <public|private>
+set -euo pipefail
+
+REPO_NAME="${1:-aether-maps}"
+VISIBILITY="${2:-public}"
+
+command -v git >/dev/null || { echo "❌ git is not installed"; exit 1; }
+
+git init -b main
+git add -A
+git commit -m "feat: Aether Maps — mobile (Expo/RN), GraphQL API, PostGIS migrations, MCP manifest, NavCore twins" --allow-empty
+
+if command -v gh >/dev/null 2>&1; then
+  gh repo create "$REPO_NAME" --"$VISIBILITY" --source . --remote origin --push
+  echo "✅ Pushed to https://github.com/$(gh api user -q .login)/$REPO_NAME"
+else
+  echo "⚠️  gh CLI not found — create the repo at github.com/new, then run:"
+  echo "    git remote add origin git@github.com:<your-username>/$REPO_NAME.git"
+  echo "    git push -u origin main"
+fi
