@@ -1,0 +1,44 @@
+# dependencies
+node_modules/
+
+# env (never commit secrets; keep .env.example)
+.env
+.env.*
+!.env.example
+
+# Expo / RN
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+.metro-health-check*
+
+# native build artifacts
+ios/build/
+ios/Pods/
+android/build/
+android/app/build/
+*.keystore
+!debug.keystore
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# typescript
+*.tsbuildinfo
+
+# logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+*.log
+
+# OS / editor
+.DS_Store
+*.swp
+
+# tile data (can be huge)
+*.mbtiles
+*.pmtiles
